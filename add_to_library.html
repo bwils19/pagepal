@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a Book</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+</head>
+<body>
+
+<div class="form-container">
+    <div class="logo-container">
+        <img src="images/books_icon.png" alt="Logo" class="logo">
+        <span class="logo-text">PAGEPAL</span>
+    </div>
+    <h1>Add a Book to Your Library</h1>
+    <form id="bookForm" action="add_book.php" method="POST">
+        <div>
+            <label for="searchTitle">Book Title:</label>
+            <input type="text" id="searchTitle" name="searchTitle" required>
+            <button type="button" onclick="searchBook()">Search</button>
+        </div>
+        <div id="searchResults" style="display:none;">
+            <label for="bookSelect">Select a Book:</label>
+            <select id="bookSelect" onchange="populateBookDetails()">
+                <option value="">Select a book</option>
+            </select>
+        </div>
+        <div id="bookDetails" style="display:none;">
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" readonly>
+            </div>
+            <div>
+                <label for="author">Author:</label>
+                <input type="text" id="author" name="author" readonly>
+            </div>
+            <div>
+                <label for="cover">Cover:</label>
+                <img id="cover" alt="Book Cover" style="display: block; max-width: 100px;">
+            </div>
+            <div>
+                <label for="pages">Pages:</label>
+                <input type="text" id="pages" name="pages" readonly>
+            </div>
+            <div>
+                <label for="summary">Summary:</label>
+                <textarea id="summary" name="summary" rows="4" readonly></textarea>
+            </div>
+            <div>
+                <label for="status">Status:</label>
+                <select id="status" name="status" required onchange="toggleRating()">
+                    <option value="want-to-read">Want to Read</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <div id="ratingDiv" style="display:none;">
+                <label for="rating">Rating:</label>
+                <select id="rating" name="rating">
+                    <option value="0">0</option>
+                    <option value="0.5">0.5</option>
+                    <option value="1">1</option>
+                    <option value="1.5">1.5</option>
+                    <option value="2">2</option>
+                    <option value="2.5">2.5</option>
+                    <option value="3">3</option>
+                    <option value="3.5">3.5</option>
+                    <option value="4">4</option>
+                    <option value="4.5">4.5</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div>
+                <input type="submit" value="Add Book">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    let searchResults = [];
+
+    function searchBook() {
+        const title = document.getElementById('searchTitle').value;
+        if (!title) return;
+
+        fetch(`https://openlibrary.org/search.json?title=${title}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.docs.length > 0) {
+                    searchResults = data.docs;
+                    const bookSelect = document.getElementById('bookSelect');
+                    bookSelect.innerHTML = '<option value="">Select a book</option>';
+                    data.docs.forEach((book, index) => {
+                        const option = document.createElement('option');
+                        option.value = index;
+                        option.text = `${book.title} by ${book.author_name ? book.author_name.join(', ') : 'Unknown'} (${book.first_publish_year || 'Unknown'})`;
+                        bookSelect.appendChild(option);
+                    });
+                    document.getElementById('searchResults').style.display = 'block';
+                    document.getElementById('bookDetails').style.display = 'none';
+                } else {
+                    alert('No books found.');
+                    document.getElementById('searchResults').style.display = 'none';
+                    document.getElementById('bookDetails').style.display = 'none';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function populateBookDetails() {
+        const selectedIndex = document.getElementById('bookSelect').value;
+        if (selectedIndex === "") {
+            clearBookDetails();
+            document.getElementById('bookDetails').style.display = 'none';
+            return;
+        }
+
+        const book = searchResults[selectedIndex];
+        document.getElementById('title').value = book.title;
+        document.getElementById('author').value = book.author_name ? book.author_name.join(', ') : 'Unknown';
+        document.getElementById('pages').value = book.number_of_pages_median || 'Unknown';
+        document.getElementById('summary').value = book.first_sentence ? book.first_sentence[0] : 'No summary available';
+        if (book.cover_i) {
+            document.getElementById('cover').src = `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
+            document.getElementById('cover').style.display = 'block';
+        } else {
+            document.getElementById('cover').style.display = 'none';
+        }
+
+        document.getElementById('bookDetails').style.display = 'block';
+    }
+
+    function clearBookDetails() {
+        document.getElementById('title').value = '';
+        document.getElementById('author').value = '';
+        document.getElementById('pages').value = '';
+        document.getElementById('summary').value = '';
+        document.getElementById('cover').style.display = 'none';
+    }
+
+    function toggleRating() {
+        const status = document.getElementById('status').value;
+        if (status === 'completed') {
+            document.getElementById('ratingDiv').style.display = 'block';
+        } else {
+            document.getElementById('ratingDiv').style.display = 'none';
+        }
+    }
+
+    document.getElementById('bookForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        // this is where we submit the form data to the server
+        // logging to the console so i can view the data that would get saved
+        for (const [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+        alert('Book added successfully!');
+        clearForm();
+    });
+
+    function clearForm() {
+        document.getElementById('searchTitle').value = '';
+        document.getElementById('searchResults').style.display = 'none';
+        clearBookDetails();
+        document.getElementById('bookDetails').style.display = 'none';
+    }
+
+    // Prevent form submission on Enter key press in searchTitle input
+    document.getElementById('searchTitle').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            searchBook();
+        }
+    });
+</script>
+
+</body>
+</html>
