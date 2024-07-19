@@ -1,0 +1,89 @@
+body {
+    background-color: #5F6F70;
+    font-family: Arial, sans-serif;
+    color: #2c3e50;
+    margin: 0;
+    padding: 0;
+}
+
+.form-container {
+    width: 50%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #A3AFB0;
+    border-radius: 10px;
+    background-color: #A3AFB0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    max-width: 50px;
+    margin-right: 10px;
+}
+
+.logo-text {
+    font-size: 45px;
+    font-weight: bold;
+    color: #E3E2CF;
+    font-family: "Kannada MN";
+}
+
+.form-container h1 {
+    text-align: center;
+    color: #5F6F70;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container form div {
+    margin: 10px 0;
+}
+
+.form-container form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-container form input,
+.form-container form select,
+.form-container form textarea {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-container form input[type=submit] {
+    width: auto;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: center;
+}
+
+.form-container form input[type=submit]:hover {
+    background-color: #2980b9;
+}
+
+#cover {
+    display: block;
+    max-width: 100px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
