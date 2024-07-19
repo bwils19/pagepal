@@ -1,5 +1,5 @@
 <?php
-// Database connection details
+// Database connection details - left over from project 8, but probably won't use this
 $servername = "localhost";
 $dbname = " ";
 $username = " ";
@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'];
     $author = $_POST['author'];
-    $cover = $_POST['cover']; // You need to handle cover image URL properly
+    $cover = $_POST['cover']; // need to handle cover image URL properly
     $pages = $_POST['pages'];
     $summary = $_POST['summary'];
     $status = $_POST['status'];
