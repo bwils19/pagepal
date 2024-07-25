@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAGEPAL - Login</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="small-form-container">
+    <div class="logo-container">
+      <img src="images/books_icon.png" alt="Logo" class="logo">
+      <div class="logo-text">PAGEPAL</div>
+    </div>
+    <h1>Login</h1>
+    <form id="login-form">
+      <div>
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" placeholder="Email" required>
+      </div>
+      <div>
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" placeholder="Password" required>
+      </div>
+      <input type="submit" value="Login">
+      <span class="link" id="show-register">Don't have an account? Register</span>
+    </form>
+    <form id="register-form" style="display: none;">
+      <div>
+        <label for="register-name">Name</label>
+        <input type="text" id="register-name" placeholder="Name" required>
+      </div>
+      <div>
+        <label for="register-username">Username</label>
+        <input type="text" id="register-username" placeholder="Username" required>
+      </div>
+      <div>
+        <label for="register-password">Password</label>
+        <input type="password" id="register-password" placeholder="Password" required>
+      </div>
+      <div>
+        <label for="register-email">Email</label>
+        <input type="email" id="register-email" placeholder="Email" required>
+      </div>
+      <input type="submit" value="Register">
+      <span class="link" id="show-login">Already have an account? Login</span>
+    </form>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
