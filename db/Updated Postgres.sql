@@ -75,7 +75,9 @@ ALTER TABLE "book_group_members" ADD FOREIGN KEY ("bg_user_id") REFERENCES "user
 
 ALTER TABLE "book_group" ADD FOREIGN KEY ("bg_current_book_id") REFERENCES "book" ("bk_id");
 
-ALTER TABLE "author" ADD FOREIGN KEY ("author_id") REFERENCES "book" ("author_id");
+-- ALTER TABLE "author" ADD FOREIGN KEY ("author_id") REFERENCES "book" ("author_id");
+
+ALTER TABLE "book" ADD FOREIGN KEY ("author_id") REFERENCES "author" ("author_id");
 
 ALTER TABLE "user_friends" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("user_id");
 
