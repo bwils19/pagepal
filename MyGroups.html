@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PAGEPAL - My Groups</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="groups.js"></script>
+  <!-- <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function(event) {
+        let group_data = getGroups();
+    });
+  </script> -->
 </head>
 <body>
   <div class="small-form-container">
@@ -13,11 +19,13 @@
       <div class="logo-text">PAGEPAL</div>
     </div>
     <h1>Groups</h1>
-    <p>
-        
+    <p class="group-description" id="group_description">
+        <img src="images/books_icon.png" alt="Logo" class="logo">
+        <label>Current book {cur book}</label>
     </p>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
-  <script src="script.js"></script>
+
+
 </body>
 </html>
