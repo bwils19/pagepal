@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loginUser(email, password) {
     // http://localhost/BookClub/login.php
     try {
-      const response = await fetch('https://infinite-beyond-05850-58f77000e905.herokuapp.com/php/login.php', {  // THIS NEEDS to be changed from localhost
+      const response = await fetch('https://infinite-beyond-05850-58f77000e905.herokuapp.com/login.php', {  // THIS NEEDS to be changed from localhost
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // http://localhost/BookClub/register.php
     try {
-      const response = await fetch('https://infinite-beyond-05850-58f77000e905.herokuapp.com/php/register.php', {  // THIS NEEDS to be changed from localhost
+      const response = await fetch('https://infinite-beyond-05850-58f77000e905.herokuapp.com/register.php', {  // THIS NEEDS to be changed from localhost
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
