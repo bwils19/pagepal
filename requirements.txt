@@ -1,3 +1,0 @@
-composer -> composer require guzzlehttp/guzzle
-guzzle
-github actions vscode extension
