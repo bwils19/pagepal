@@ -1,11 +1,31 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>My Groups</title>
-    
-
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAGEPAL - My Groups</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="groups.js"></script>
+  <!-- <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function(event) {
+        let group_data = getGroups();
+    });
+  </script> -->
+</head>
 <body>
-    <h2>My Groups</h2>
+  <div class="small-form-container">
+    <div class="logo-container">
+      <img src="images/books_icon.png" alt="Logo" class="logo">
+      <div class="logo-text">PAGEPAL</div>
+    </div>
+    <h1>Groups</h1>
+    <p class="group-description" id="group_description">
+        <img src="images/books_icon.png" alt="Logo" class="logo">
+        <label>Current book {cur book}</label>
+    </p>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+
 
 </body>
+</html>
