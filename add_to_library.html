@@ -13,7 +13,7 @@
         <img src="images/books_icon.png" alt="Logo" class="logo">
         <span class="logo-text">PAGEPAL</span>
     </div>
-    <h1>Add a Book to Your Library</h1>
+    <h1>Add a Book</h1>
     <form id="bookForm" action="add_book.php" method="POST">
         <div>
             <label for="searchTitle">Book Title:</label>
@@ -37,7 +37,8 @@
             </div>
             <div>
                 <label for="cover">Cover:</label>
-                <img id="cover" alt="Book Cover" style="display: block; max-width: 100px;">
+                <input type="text" id="cover" name="cover" readonly>
+                <img id="coverImage" alt="Book Cover" style="display: block; max-width: 100px;">
             </div>
             <div>
                 <label for="pages">Pages:</label>
@@ -78,8 +79,16 @@
     </form>
 </div>
 
+<!--this is the box that will pop up if the user is trying to add a book to the lib when it already exists-->
+<div id="duplicateModal" style="display:none;">
+    <p>This book is already in your library, are you sure you want to continue adding?</p>
+    <button onclick="continueAdding()">Continue Adding</button>
+    <button onclick="closeModal()">Go Back</button>
+</div>
+
 <script>
     let searchResults = [];
+    let duplicateCheck = false;
 
     function searchBook() {
         const title = document.getElementById('searchTitle').value;
@@ -122,11 +131,12 @@
         document.getElementById('author').value = book.author_name ? book.author_name.join(', ') : 'Unknown';
         document.getElementById('pages').value = book.number_of_pages_median || 'Unknown';
         document.getElementById('summary').value = book.first_sentence ? book.first_sentence[0] : 'No summary available';
+        document.getElementById('cover').value = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : '';
         if (book.cover_i) {
-            document.getElementById('cover').src = `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
-            document.getElementById('cover').style.display = 'block';
+            document.getElementById('coverImage').src = `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
+            document.getElementById('coverImage').style.display = 'block';
         } else {
-            document.getElementById('cover').style.display = 'none';
+            document.getElementById('coverImage').style.display = 'none';
         }
 
         document.getElementById('bookDetails').style.display = 'block';
@@ -137,7 +147,8 @@
         document.getElementById('author').value = '';
         document.getElementById('pages').value = '';
         document.getElementById('summary').value = '';
-        document.getElementById('cover').style.display = 'none';
+        document.getElementById('cover').value = '';
+        document.getElementById('coverImage').style.display = 'none';
     }
 
     function toggleRating() {
@@ -151,24 +162,70 @@
 
     document.getElementById('bookForm').addEventListener('submit', function(event) {
         event.preventDefault();
-        const formData = new FormData(this);
-        // this is where we submit the form data to the server
-        // logging to the console so i can view the data that would get saved
-        for (const [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
+        if (!duplicateCheck) {
+            checkDuplicate();
+        } else {
+            submitForm();
         }
-        alert('Book added successfully!');
-        clearForm();
     });
+
+    function checkDuplicate() {
+        const title = document.getElementById('title').value;
+        const author = document.getElementById('author').value;
+
+        fetch('dupe_check.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}`,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                document.getElementById('duplicateModal').style.display = 'block';
+            } else {
+                submitForm();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function continueAdding() {
+        duplicateCheck = true;
+        document.getElementById('duplicateModal').style.display = 'none';
+        submitForm();
+    }
+
+    function closeModal() {
+        document.getElementById('duplicateModal').style.display = 'none';
+    }
+
+    function submitForm() {
+        const formData = new FormData(document.getElementById('bookForm'));
+        fetch(document.getElementById('bookForm').action, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            alert('Book added successfully!');
+            clearForm();
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
     function clearForm() {
         document.getElementById('searchTitle').value = '';
         document.getElementById('searchResults').style.display = 'none';
         clearBookDetails();
         document.getElementById('bookDetails').style.display = 'none';
+        document.getElementById('status').value = 'want-to-read';
+        toggleRating();
+        duplicateCheck = false; // reset dupe check
     }
 
-    // Prevent form submission on Enter key press in searchTitle input
     document.getElementById('searchTitle').addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
