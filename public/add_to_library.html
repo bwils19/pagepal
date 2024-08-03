@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add a Book</title>
-    <link rel="stylesheet" href="static/css/styles.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
 </head>
 <body>
 
@@ -37,7 +37,7 @@
             </div>
             <div>
                 <label for="cover">Cover:</label>
-                <input type="text" id="cover" name="cover" readonly>
+                <input type="hidden" id="cover" name="cover">
                 <img id="coverImage" alt="Book Cover" style="display: block; max-width: 100px;">
             </div>
             <div>
@@ -79,7 +79,7 @@
     </form>
 </div>
 
-<!--this is the box that will pop up if the user is trying to add a book to the lib when it already exists-->
+<!-- This is the box that will pop up if the user is trying to add a book to the library when it already exists -->
 <div id="duplicateModal" style="display:none;">
     <p>This book is already in your library, are you sure you want to continue adding?</p>
     <button onclick="continueAdding()">Continue Adding</button>
