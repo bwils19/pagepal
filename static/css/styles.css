@@ -6,14 +6,21 @@ body {
     padding: 0;
 }
 
-.form-container {
-    width: 50%;
+.form-container,
+.main-container {
+    background-color: #A3AFB0;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
     padding: 20px;
-    border: 1px solid #A3AFB0;
-    border-radius: 10px;
-    background-color: #A3AFB0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+    width: 50%;
+}
+
+.main-container {
+    width: 80%;
 }
 
 .logo-container {
@@ -35,8 +42,12 @@ body {
     font-family: "Kannada MN";
 }
 
-.form-container h1 {
+h1 {
     text-align: center;
+    color: #5F6F70;
+}
+
+.form-container h1 {
     color: #5F6F70;
 }
 
@@ -45,7 +56,8 @@ body {
     flex-direction: column;
 }
 
-.form-container form div {
+.form-container form div,
+.book-info {
     margin: 10px 0;
 }
 
@@ -86,4 +98,115 @@ body {
     margin-top: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
+}
+
+.book-feed {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.book-item {
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.book-cover {
+    width: 100px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.book-info h3 {
+    margin: 5px 0;
+    font-size: 18px;
+}
+
+.book-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #5F6F70;
+}
+
+.status {
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 12px;
+}
+
+.status.want-to-read {
+    background-color: #3498db;
+}
+
+.status.in-progress {
+    background-color: #f39c12;
+}
+
+.status.completed {
+    background-color: #2ecc71;
+}
+
+.rating {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #f1c40f;
+}
+
+.add-book-button-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.add-book-button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-book-button:hover {
+    background-color: #2980b9;
+}
+
+.logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #2980b9;
+}
+
+.main-container {
+    position: relative; /* Ensure the main container is relative to position the logout button correctly */
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #A3AFB0;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

@@ -10,6 +10,7 @@ $user = supabase_fetch_user_by_email($email);
 
 if ($user && password_verify($password, $user['password'])) {
     echo json_encode(["status" => "success"]);
+    echo '<script>window.location.href="main_page.html";</script>';
 } else {
     echo json_encode(["status" => "error", "message" => "Invalid credentials"]);
 }

@@ -96,33 +96,48 @@
     let searchResults = [];
     let duplicateCheck = false;
 
-    function searchBook() {
-        const title = document.getElementById('searchTitle').value;
-        if (!title) return;
+function searchBook() {
+    const title = document.getElementById('searchTitle').value;
+    if (!title) return;
 
-        fetch(`https://openlibrary.org/search.json?title=${title}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.docs.length > 0) {
-                    searchResults = data.docs;
-                    const bookSelect = document.getElementById('bookSelect');
-                    bookSelect.innerHTML = '<option value="">Select a book</option>';
-                    data.docs.forEach((book, index) => {
-                        const option = document.createElement('option');
-                        option.value = index;
-                        option.text = `${book.title} by ${book.author_name ? book.author_name.join(', ') : 'Unknown'} (${book.first_publish_year || 'Unknown'})`;
-                        bookSelect.appendChild(option);
-                    });
-                    document.getElementById('searchResults').style.display = 'block';
-                    document.getElementById('bookDetails').style.display = 'none';
-                } else {
-                    alert('No books found.');
-                    document.getElementById('searchResults').style.display = 'none';
-                    document.getElementById('bookDetails').style.display = 'none';
-                }
-            })
-            .catch(error => console.error('Error:', error));
+    console.log('Searching for:', title);
+
+    fetch(`https://openlibrary.org/search.json?title=${title}`)
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Data received:', data);
+
+            if (data.docs.length > 0) {
+                searchResults = data.docs;
+                const bookSelect = document.getElementById('bookSelect');
+                bookSelect.innerHTML = '<option value="">Select a book</option>';
+                data.docs.forEach((book, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.text = `${book.title} by ${book.author_name ? book.author_name.join(', ') : 'Unknown'} (${book.first_publish_year || 'Unknown'})`;
+                    bookSelect.appendChild(option);
+                });
+                document.getElementById('searchResults').style.display = 'block';
+                document.getElementById('bookDetails').style.display = 'none';
+            } else {
+                alert('No books found.');
+                document.getElementById('searchResults').style.display = 'none';
+                document.getElementById('bookDetails').style.display = 'none';
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
+
+document.getElementById('searchTitle').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        searchBook();
+    }
+});
+
 
     function populateBookDetails() {
         const selectedIndex = document.getElementById('bookSelect').value;

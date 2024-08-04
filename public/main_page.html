@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Library - PagePal</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="logo-container">
+        <button class="logout-button" onclick="logout()">Logout</button>
+        <img src="images/books_icon.png" alt="Logo" class="logo">
+        <span class="logo-text">PAGEPAL</span>
+    </div>
+    <h1>My Library</h1>
+
+    <div class="add-book-button-container">
+        <button class="add-book-button" onclick="window.location.href='add_to_library.html'">Add a Book</button>
+    </div>
+    <div id="book-feed" class="book-feed">
+    </div>
+</div>
+
+<script>
+// Supabase client initialization
+const supabaseUrl = 'https://ojygetcgjabzpxbmdaax.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9qeWdldGNnamFienB4Ym1kYWF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjEzNDUyNzEsImV4cCI6MjAzNjkyMTI3MX0.K7M16UbjRvJ7YLf7YcTgEdmCbXz5rq1_jV8ERNUqxFA';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+async function fetchBooks() {
+    if (!supabase.auth.user()) {
+        alert('You must be logged in to view your library.');
+        return;
+    }
+
+    const user_id = supabase.auth.user().id;
+    const { data: books, error } = await supabase
+        .from('user_books')
+        .select('*')
+        .eq('user_id', user_id);
+
+    if (error) {
+        console.error('Error fetching books:', error.message);
+        return;
+    }
+
+    displayBooks(books);
+}
+
+function displayBooks(books) {
+    const bookFeed = document.getElementById('book-feed');
+    bookFeed.innerHTML = '';
+
+    books.forEach(book => {
+        const bookItem = document.createElement('div');
+        bookItem.className = 'book-item';
+
+        bookItem.innerHTML = `
+            <img src="${book.cover}" alt="${book.title} cover" class="book-cover">
+            <div class="book-info">
+                <h3>${book.title}</h3>
+                <p>${book.author}</p>
+                <div class="status ${book.status.toLowerCase().replace(/\s+/g, '-')}">${book.status}</div>
+                ${book.status === 'completed' ? `<div class="rating">${renderStars(book.rating)}</div>` : ''}
+            </div>
+        `;
+
+        bookFeed.appendChild(bookItem);
+    });
+}
+
+function renderStars(rating) {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating % 1 >= 0.5;
+    let stars = '';
+
+    for (let i = 0; i < fullStars; i++) {
+        stars += '★';
+    }
+    if (halfStar) {
+        stars += '☆';
+    }
+
+    return stars;
+}
+
+fetchBooks();
+
+function logout() {
+    supabase.auth.signOut().then(() => {
+        window.location.href = 'index.html';
+    });
+}
+</script>
+
+</body>
+</html>
