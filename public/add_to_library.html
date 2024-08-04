@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add a Book</title>
     <link rel="stylesheet" href="../static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
 </head>
 <body>
 
@@ -87,6 +89,10 @@
 </div>
 
 <script>
+
+    const supabaseUrl = 'https://ojygetcgjabzpxbmdaax.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9qeWdldGNnamFienB4Ym1kYWF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjEzNDUyNzEsImV4cCI6MjAzNjkyMTI3MX0.K7M16UbjRvJ7YLf7YcTgEdmCbXz5rq1_jV8ERNUqxFA';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
     let searchResults = [];
     let duplicateCheck = false;
 
@@ -201,19 +207,38 @@
         document.getElementById('duplicateModal').style.display = 'none';
     }
 
-    function submitForm() {
+    async function submitForm() {
+        if (!supabase.auth.user()) {
+            alert('You must be logged in to add books to your library.');
+            return;
+        }
         const formData = new FormData(document.getElementById('bookForm'));
-        fetch(document.getElementById('bookForm').action, {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log(data);
-            alert('Book added successfully!');
-            clearForm();
-        })
-        .catch(error => console.error('Error:', error));
+        const title = formData.get('title');
+        const author = formData.get('author');
+        const cover = formData.get('cover');
+        const pages = formData.get('pages');
+        const summary = formData.get('summary');
+        const status = formData.get('status');
+        const rating = formData.get('rating') || null;
+
+        try {
+            const { data, error } = await supabase
+                .from('user_books')
+                .insert([
+                    { title, author, cover, pages, summary, status, rating, user_id: supabase.auth.user().id }
+                ]);
+
+            if (error) {
+                throw error;
+            } else {
+                console.log('Book added successfully!', data);
+                alert('Book added successfully!');
+                clearForm();
+            }
+        } catch (error) {
+            console.error('Error adding book:', error.message);
+            alert('Failed to add book. Please try again.');
+        }
     }
 
     function clearForm() {
