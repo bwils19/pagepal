@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to handle user login
 async function loginUser(email, password) {
   try {
+    console.log('Starting login process'); // Initial log
     const response = await fetch('https://infinite-beyond-05850-58f77000e905.herokuapp.com/login.php', {
       method: 'POST',
       headers: {
@@ -59,9 +60,10 @@ async function loginUser(email, password) {
     const text = await response.text(); // Get the raw response text
     console.log('Raw response:', text); // Log the raw response to the console
 
+    // Try to parse the raw response as JSON
     try {
-      const result = JSON.parse(text); // Try to parse the raw response as JSON
-      console.log(result);
+      const result = JSON.parse(text);
+      console.log('Parsed JSON:', result);
       if (result.status === 'success') {
         return true;
       } else {
@@ -77,6 +79,7 @@ async function loginUser(email, password) {
     return false;
   }
 }
+
 
   // Function to handle user registration
   async function registerUser(name, username, password, email) {
