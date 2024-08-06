@@ -56,15 +56,20 @@ async function loginUser(email, password) {
       body: JSON.stringify({ username: email, password })
     });
 
-    const text = await response.text(); // raw text response
-    console.log('Raw response:', text); // log the raw response
+    const text = await response.text(); // Get the raw response text
+    console.log('Raw response:', text); // Log the raw response to the console
 
-    const result = JSON.parse(text); //parse it as JSON
-    console.log(result);
-    if (result.status === 'success') {
-      return true;
-    } else {
-      console.error('Login error:', result.message);
+    try {
+      const result = JSON.parse(text); // Try to parse the raw response as JSON
+      console.log(result);
+      if (result.status === 'success') {
+        return true;
+      } else {
+        console.error('Login error:', result.message);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error parsing JSON:', error, 'Raw response:', text);
       return false;
     }
   } catch (error) {
