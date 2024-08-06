@@ -56,7 +56,10 @@ async function loginUser(email, password) {
       body: JSON.stringify({ username: email, password })
     });
 
-    const result = await response.json();
+    const text = await response.text(); // raw text response
+    console.log('Raw response:', text); // log the raw response
+
+    const result = JSON.parse(text); //parse it as JSON
     console.log(result);
     if (result.status === 'success') {
       return true;
