@@ -7,13 +7,13 @@ require 'supabaseClient.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (isset($data['username'])) {
-    $email = $data['username'];
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Username is missing']);
+// Check if the required data is present
+if (!isset($data['username']) || !isset($data['password'])) {
+    echo json_encode(["status" => "error", "message" => "Username or password is missing"]);
     exit;
 }
 
+$email = $data['username'];
 $password = $data['password'];
 
 $user = supabase_fetch_user_by_email($email);
