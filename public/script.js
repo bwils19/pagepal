@@ -46,29 +46,29 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Function to handle user login
-  async function loginUser(email, password) {
-    // http://localhost/BookClub/login.php
-    try {
-      const response = await fetch('https://infinite-beyond-05850-58f77000e905.herokuapp.com/login.php', {  // THIS NEEDS to be changed from localhost
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username: email, password })
-      });
-      const result = await response.json();
-      console.log(result)
-      if (result.status === 'success') {
-        return true;
-      } else {
-        console.error('Login error:', result.message);
-        return false;
-      }
-    } catch (error) {
-      console.error('Error logging in:', error);
+async function loginUser(email, password) {
+  try {
+    const response = await fetch('https://infinite-beyond-05850-58f77000e905.herokuapp.com/login.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username: email, password })
+    });
+
+    const result = await response.json();
+    console.log(result);
+    if (result.status === 'success') {
+      return true;
+    } else {
+      console.error('Login error:', result.message);
       return false;
     }
+  } catch (error) {
+    console.error('Error logging in:', error);
+    return false;
   }
+}
 
   // Function to handle user registration
   async function registerUser(name, username, password, email) {

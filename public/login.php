@@ -7,19 +7,20 @@ require 'supabaseClient.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (isset($data['username']) && isset($data['password'])) {
+if (isset($data['username'])) {
     $email = $data['username'];
-    $password = $data['password'];
-
-    $user = supabase_fetch_user_by_email($email);
-
-    if ($user && password_verify($password, $user['password'])) {
-        echo json_encode(["status" => "success"]);
-        echo '<script>window.location.href="main_page.html";</script>';
-    } else {
-        echo json_encode(["status" => "error", "message" => "Invalid credentials"]);
-    }
 } else {
-    echo json_encode(["status" => "error", "messgae" => "missing creds"]);
+    echo json_encode(['status' => 'error', 'message' => 'Username is missing']);
+    exit;
+}
+
+$password = $data['password'];
+
+$user = supabase_fetch_user_by_email($email);
+
+if ($user && password_verify($password, $user['password'])) {
+    echo json_encode(["status" => "success"]);
+} else {
+    echo json_encode(["status" => "error", "message" => "Invalid credentials"]);
 }
 ?>
